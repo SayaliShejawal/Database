@@ -1,0 +1,30 @@
+Q1.Assume there is a table called Multicust, with all of the same column definitions
+   as Salespeople. Write a command that inserts all salespeople with more than one
+   customer into this table.
+ANS:->
+create table Multicust as select * from Salespeople
+where snum in(select snum from customers group by snum
+having count(snum) > 1);
+
+select * from Multicust;
+
+=========================================================
+
+Q2. Write a command that deletes all customers with no current orders.
+ANS:->
+delete from customers
+where cnum=ANY
+(select cnum from orders
+where cnum NOT IN(select cnum from customers));
+
+=========================================================
+
+Q3. Write a command that increases by twenty percent the commissions of all  
+    salespeople with total orders above Rs. 3,000.
+ANS:->
+UPDATE salespeople
+SET comm=comm*1.20
+WHERE snum IN(select snum from orders where amt>300);
+
+select * from salespeople;
+=========================================================
